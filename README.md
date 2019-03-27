@@ -23,3 +23,6 @@
 3.启动nginx
 ## 三、访问项目
 在浏览器中输入:`http://localhost/TaggingSystem-front`
+
+## 四、AdonisJS介绍
+AdonisJS是一个优雅的Node.js框架，他有着和Larvale极其相似的思想，并且天生适合有Restful API架构，这十分有利于我们进行前后端分离实践。
