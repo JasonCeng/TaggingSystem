@@ -1,0 +1,12 @@
+.container p.content {
+  padding: 20px;
+  overflow-y: auto;
+  height: 250px; }
+
+/*# sourceMappingURL=style.css.map */
+
+.textarea-margin {
+  border: 10px 0 10px 0;
+  padding:10px 0 10px 0;
+  margin: 10px 0 10px 0;
+}

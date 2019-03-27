@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>标注系统</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="javascript:void(0)">中文实体关系标注系统</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="./article.html">首页</a></li>
+          <li><a href="#">工作区<span class="sr-only">(current)</span></a></li>
+          <li><a href="./form.html">添加文章</a></li>
+          <li><a href="javascript:void(0)">使用说明</a></li>
+          <li><a href="javascript:void(0)">赞助</a></li>
+        </ul>
+        <!--
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="javascript:void(0)">登录</a></li>
+                    <li><a href="javascript:void(0)">注册</a></li>
+                </ul>-->
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+  </nav>
+  <div id="app" class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <textarea name="" id="" cols="30" rows="10" class="textarea-margin form-control content">{{content}}</textarea>
+        <!-- <p class="content"></p> -->
+        <div class="row">
+          <div class="col-sm-6"></div>
+          <div class="col-sm-2"><a href="javascript:void(0)" class="btn btn-success pull-right" @click="addOption(1)">添加实体1</a></div>
+          <div class="col-sm-2"><a href="javascript:void(0)" class="btn btn-success pull-right" @click="addOption(2)">添加实体2</a></div>
+          <div class="col-sm-2"><a href="javascript:void(0)" class="btn btn-success pull-right" @click="addSentence">添加句子</a></div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>实体1</th>
+              <th>实体2</th>
+              <th>关系</th>
+              <th>所在句子</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in table">
+              <td class="content1">{{item.content1}}</td>
+              <td class="content2">{{item.content2}}</td>
+              <td class="relay">{{item.relay}}</td>
+              <td class="sentence">{{item.sentence}}</td>
+              <td><a href="javascript:void(0);" class="btn btn-danger btn-xs delete" @click="del(item.id)">删除</a></td>
+            </tr>
+            <tr>
+              <td><input type="text" v-model="formdata.content1"></td>
+              <td><input type="text" v-model="formdata.content2"></td>
+              <td><select name="" id="" v-model="formdata.relay">
+                <option value="出生地">出生地</option>
+                <option value="出生日期">出生日期</option>
+                <option value="家人">家人</option>
+                <option value="出生地">工作</option>                
+              </select></td>
+              <td><input type="text" v-model="formdata.sentence"></td>
+              <td><a href="javascript:void(0);" id="add-databases" class="btn btn-success btn-xs delete" @click="add">添加</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/jquery-3.2.1.min.js"></script>
+  <script src="assets/js/vue.js"></script>
+  <script>
+    $(function () {
+      //测试文本
+      const content = '姚明（Yao Ming）[1]  ，1980年9月12日出生于上海市徐汇区，祖籍江苏省苏州市吴江区震泽镇，前中国职业篮球运动员，司职中锋，现任中职联公司董事长兼总经理[2]  。1998年4月，姚明入选王非执教的国家队，开始篮球生涯。2001夺得CBA常规赛MVP[3]  ，2002年夺得CBA总冠军以及总决赛MVP[3]  ，分别3次当选CBA篮板王以及盖帽王[3]  ，2次当选CBA扣篮王[3]  。在2002年NBA选秀中，他以状元秀身份被NBA的休斯敦火箭队选中，2003-09年[3]  连续6个赛季（生涯共8次）[3]  入选NBA全明星阵容[3]  ，2次入选NBA最佳阵容二阵[3]  ，3次入选NBA最佳阵容三阵[3]  。2009年，姚明收购上海男篮，成为上海大鲨鱼篮球俱乐部老板。2011年7月20日，姚明正式宣布退役。2013年，姚明当选为第十二届全国政协委员。2014年6月，参加湖南卫视《爸爸去哪儿》客串嘉宾。2015年2月10日，姚明正式成为北京申办冬奥会形象大使之一。2016年4月4日，姚明正式入选2016年奈·史密斯篮球名人纪念堂，成为首位获此殊荣的中国人。[4]  10月，姚明成为中国"火星大使"。11月，当选CBA公司副董事长[5]  。2017年2月4日，姚明的11号球衣在火箭主场对公牛的中场休息时退役[6]  。2月23日，在中国篮球协会第九届全国代表大会上，姚明当选篮协主席[7]  。'
+      //
+      function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+      }
+
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            content_id: getUrlParam('content_id') || 0,
+            table: [],
+            content: '',
+            /*option: {
+              content1: 'yaoming2',
+              content2: 'shanghai3',
+              relay: 'hometown4',
+              sentence: 'yaoming\'s hometown is shanghai5'
+            },*/
+            formdata: {
+              content1: '',
+              content2: '',
+              relay: '出生地',
+              sentence: ''
+            }
+          }
+        },
+        watch: {
+          'formdata.content1': function () {
+            this.addOption(1)
+          },
+          'formdata.content2': function () {
+            this.addOption(2)
+          }
+        },
+        created() {
+          this.fetchContent()
+          this.fetchTable()
+        },
+        methods: {
+          fetchContent() {
+            let _this = this
+            $.ajax({
+              url: 'http://10.128.93.229:3333/content/detail',
+              type: 'post',
+              data: {
+                content_id: _this.content_id
+              },
+              success: function (res) {
+                _this.content = res.detail.content
+              },
+              error: function (err) {
+                console.log(err)
+              }
+            })
+          },
+          fetchTable() {
+            let _this = this
+            $.ajax({
+              url: 'http://10.128.93.229:3333/sentence/lists',
+              type: 'post',
+              data: {
+                content_id: _this.content_id
+              },
+              success: function (res) {
+                //console.log(res.data)
+                _this.table = res.data
+                //console.log(_this.table)
+              },
+              error: function (err) {
+                console.log(err)
+              }
+            })
+          },
+          add() {
+            let _this = this
+            let option = {
+              content1: _this.formdata.content1,
+              content2: _this.formdata.content2,
+              relay: _this.formdata.relay,
+              sentence: _this.formdata.sentence,
+              content_id: _this.content_id
+            }
+            $.ajax({
+              url: 'http://10.128.93.229:3333/sentence/create',
+              type: 'post',
+              data: option,
+              success: function (res) {
+                _this.fetchTable()
+              },
+              error: function (err) {
+                console.log(err)
+              }
+            })
+          },
+          addSentence() {
+            let _this = this
+            let str = document.getSelection().toString()
+            _this.formdata.sentence = str
+            console.log(_this.formdata.sentence)
+          },
+          addOption(type) {
+            let _this = this
+            let str = document.getSelection().toString()
+            console.log(str)
+            if (Number(type) === 1) {
+              _this.formdata.content1 = str
+            } else if (Number(type) === 2) {
+              _this.formdata.content2 = str
+            }
+          },
+          del(id) {
+            let _this = this
+            $.ajax({
+              url: 'http://10.128.93.229:3333/sentence/del',
+              type: 'post',
+              data: {
+                id: id
+              },
+              success: function (res) {
+                console.log(res)
+                _this.fetchTable()
+              },
+              error: function (err) {
+                console.error(err)
+              }
+            })
+          }
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>

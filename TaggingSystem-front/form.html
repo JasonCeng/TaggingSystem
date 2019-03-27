@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>添加文章</title>
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="javascript:void(0)">中文实体关系标注系统</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="./article.html">首页</a></li>
+          <li><a href="./index.html">工作区</a></li>
+          <li><a href="#">添加文章<span class="sr-only">(current)</span></a></li>
+          <li><a href="javascript:void(0)">使用说明</a></li>
+          <li><a href="javascript:void(0)">赞助</a></li>
+        </ul>
+        <!--
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="javascript:void(0)">登录</a></li>
+                    <li><a href="javascript:void(0)">注册</a></li>
+                </ul>-->
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+  </nav>
+  <div id="app" class="container">
+    <div class="form-group">
+      <p>文章录入
+        <p>
+          <input type="text" class="form-control" v-model="formdata.title" placeholder="请输入标题">
+    </div>
+    <p>
+      <textarea class="form-control" rows="3" v-model="formdata.content" placeholder="请输入内容"></textarea>
+    </p>
+    <button class="btn btn-default btn-success pull-right" @click="add">提交</button>
+  </div>
+  <script src="assets/js/jquery-3.2.1.min.js"></script>
+  <script src="assets/js/vue.js"></script>
+  <script>
+    $(function () {
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            formdata: {
+              title: '',
+              content: ''
+            }
+          }
+        },
+        watch: {
+        },
+        created() {
+        },
+        methods: {
+          add() {
+            let _this = this
+            $.ajax({
+              url: 'http://10.128.93.229:3333/content/create',
+              type: 'post',
+              data: _this.formdata,
+              success: function (res) {
+                console.log(res)
+              },
+              error: function (err) {
+                console.log(err)
+              }
+            })
+          }
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
