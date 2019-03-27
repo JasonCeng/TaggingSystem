@@ -1,35 +1,25 @@
-# AdonisJs Application
+# AdonisJs TaggingSystem
+本项目基于AdonisJS@3进行构建。实现了前后端分离架构，前端工程为`TaggingSystem-front`，项目具体特点及运行方法如下。
 
-This repo is the pre-configured project structure to be used for creating ambitious web servers using AdonisJs.
+## 一、特点：
+1.本系统做了前后分离，符合MVC开发模式。
+2.前端使用了Vue.js实现了MVVM数据双向绑定，即视图层view。
+3.后端使用了Adonis.js实现了与数据库的交互和与前台数据的传输，即数据模型层Model和控制层Controller。
+4.使用Ajax对JSON数据进行跨域传输。
 
-> Make sure to star the official [framework repo](https://github.com/adonisjs/adonis-framework) or [tweet on twitter](https://twitter.com/intent/tweet?url=http://adonisjs.com&text=I%20am%20using%20AdonisJs,%20a%20practical%20MVC%20framework%20for%20nodejs&hashtags=nodejs,adonisframework) :wave:
-
-## Story
-
-One day a :boy: wanted to write a web application to slowly turn it into a business and make some :moneybag: for better living. Being a Javascript lover, he decided to go with Node.js. 
-
-Hosting Node.js applications are cheap and offers lots of mordern programming concepts to build realtime data rich applications.
-
-He was so excited and full of energy to build this application and share it with the world. But soon his dreams started struggling with the amount of decisions he has to make, just to build an MVP of his idea. These decisions were not even related to the business and was about.
-
-1. How should I structure my application?
-2. Why do I need to download 20 modules just to start an HTTP server, parse request body and upload files.
-3. How should I manage the authentication on website, and expose public API for others to interact with the data?
-4. What do I need to do to secure my application from web attacks and how to handle CORS?
-5. Why do I have ton of `require` statements everywhere?
-6. How the heck should I test my code? I am having hard time mocking dependencies.
-7. **WHY THE :fish:** there are no standards to write some code. Hell I am not going to write this application and going for a walk.
-
-
-## Not Anymore
-
-This is so frustating. Node.js is a beautiful language but all of the above questions have never been answered together. We all love writing small concise modules but business are not created by downloading 20 modules.
-
-Developers needs productive tools, so that they can focus on what matters, and not on downloading & finding the best ways to combine these small modules. 
-
-## AdonisJs
-
-AdonisJs is a beautiful framework with pre-configured answers to all of your questions. We not only created this framework, but validated the features of framework with realtime problems and still improving every bit, so that you have to write less and structured code.
-
-This time a :boy: will write his ambitious application and will set the world on :fire:. Don't hesitate to work on your ideas and we promise to improve the framework every :sunny: and :first_quarter_moon_with_face: and YESSSS do not forget to star us on [:octocat:](https://github.com/adonisjs/adonis-framework)
-
+## 二、部署运行
+### （一）mysql部署与运行
+1.安装mysql并创建`tables`数据库
+2.添加远程用户并赋予访问权限
+3.运行mysql
+### （二）后端部署与运行
+1.引入node_modules：`npm install`
+2.对`database/migrations`下的两个js文件，即对contents表和entity_relation表进行数据迁移：`./ace migration:run`
+3.注意修改`.env`文件的配置信息
+4.启动服务：`npm run serve:dev`
+### （三）前端部署与运行
+1.安装nginx并配置80端口允许指定跨域
+2.将`TaggingSystem-front`文件夹放到nginx的`html`文件夹下
+3.启动nginx
+## 三、访问项目
+在浏览器中输入:`http://localhost/TaggingSystem-front`
